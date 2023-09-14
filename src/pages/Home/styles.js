@@ -26,7 +26,7 @@ export const InputSearchContainer = styled.div`
 export const Header = styled.header`
   display: flex;
   align-items: center;
-  justify-content: ${({ justifycontent }) => justifycontent};
+  justify-content: ${({ $justifyContent }) => $justifyContent};
   margin-top: 32px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.gray[100]};
   padding-bottom: 16px;
