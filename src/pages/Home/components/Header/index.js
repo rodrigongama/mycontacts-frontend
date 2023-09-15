@@ -7,11 +7,11 @@ import { Container } from './styles';
 export default function Header({ hasError, qtyOfContacts, qtyOfFilteredContacts }) {
   const alignment = hasError
     ? 'flex-end'
-    : (qtyOfContacts ? 'space-between' : 'center');
+    : (qtyOfContacts === 0 ? 'space-between' : 'center');
 
   return (
     <Container $justifyContent={alignment}>
-      {(!hasError && qtyOfContacts) && (
+      {(!hasError && qtyOfContacts === 0) && (
         <strong>
           {qtyOfFilteredContacts}
           {qtyOfFilteredContacts === 1 ? ' contato' : ' contatos'}
