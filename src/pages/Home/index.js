@@ -1,13 +1,15 @@
 import useHome from './useHome';
+
 import Header from './components/Header';
 import ContactsList from './components/ContactsList';
-
+import InputSearch from './components/InputSearch';
+import ErrorStatus from './components/ErrorStatus';
+import EmptyList from './components/EmptyList';
+import SearchNotFound from './components/SearchNotFound';
 import Loader from '../../components/Loader';
-import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 
-import sad from '../../assets/images/sad.svg';
-
-import { Container, InputSearchContainer, ErrorContainer } from './styles';
+import { Container } from './styles';
 
 export default function Home() {
   const {
@@ -28,19 +30,19 @@ export default function Home() {
     handleDeleteContact,
   } = useHome();
 
+  const hasContacts = contacts.length > 0;
+  const isListEmpty = !hasError && !isLoading && !hasContacts;
+  const isSearchEmpty = !hasError && hasContacts && filteredContacts.length === 0;
+
   return (
     <Container>
       <Loader isLoading={isLoading} />
 
-      {contacts.length > 0 && (
-        <InputSearchContainer>
-          <input
-            type="text"
-            placeholder="Pesquise pelo nome..."
-            value={searchTerm}
-            onChange={handleChangeSearchTerm}
-          />
-        </InputSearchContainer>
+      {hasContacts && (
+        <InputSearch
+          value={searchTerm}
+          onChange={handleChangeSearchTerm}
+        />
       )}
 
       <Header
@@ -49,38 +51,32 @@ export default function Home() {
         qtyOfFilteredContacts={filteredContacts.length}
       />
 
-      {hasError && (
-        <ErrorContainer>
-          <img src={sad} alt="Sad" />
+      {hasError && <ErrorStatus onTryAgain={handleTryAgain} />}
+      {isListEmpty && <EmptyList />}
+      {isSearchEmpty && <SearchNotFound searchTerm={searchTerm} />}
 
-          <div className="details">
-            <strong>Ocorreu um erro ao obter os seus contatos!</strong>
+      {hasContacts && (
+        <>
+          <ContactsList
+            filteredContacts={filteredContacts}
+            orderBy={orderBy}
+            onToggleOrderBy={handleToggleOrderBy}
+            onDeleteContact={handleDeleteContact}
+          />
 
-            <Button
-              type="button"
-              onClick={handleTryAgain}
-            >
-              Tentar novamente
-            </Button>
-          </div>
-        </ErrorContainer>
+          <Modal
+            danger
+            visible={isDeleteModalVisible}
+            isLoading={isLoadingDelete}
+            title={`Tem certeza que deseja remover o contato ”${contactBeingDeleted?.name}”?`}
+            confirmLabel="Deletar"
+            onCancel={handleCloseDeleteModal}
+            onConfirm={handleConfirmDeleteContact}
+          >
+            <p>Esta ação não poderá ser desfeita!</p>
+          </Modal>
+        </>
       )}
-
-      <ContactsList
-        isLoading={isLoading}
-        isDeleteModalVisible={isDeleteModalVisible}
-        isLoadingDelete={isLoadingDelete}
-        contactBeingDeleted={contactBeingDeleted}
-        handleCloseDeleteModal={handleCloseDeleteModal}
-        handleConfirmDeleteContact={handleConfirmDeleteContact}
-        contacts={contacts}
-        searchTerm={searchTerm}
-        hasError={hasError}
-        filteredContacts={filteredContacts}
-        orderBy={orderBy}
-        handleToggleOrderBy={handleToggleOrderBy}
-        handleDeleteContact={handleDeleteContact}
-      />
     </Container>
   );
 }
