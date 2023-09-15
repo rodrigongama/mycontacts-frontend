@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-no-useless-fragment */
 import { Link } from 'react-router-dom';
-import useHome from '../../useHome';
+import PropTypes from 'prop-types';
 
 import Modal from '../../../../components/Modal';
 
@@ -18,23 +18,21 @@ import {
   SearchNotFoundContainer,
 } from './styles';
 
-export default function ContactsList() {
-  const {
-    isLoading,
-    isDeleteModalVisible,
-    isLoadingDelete,
-    contactBeingDeleted,
-    handleCloseDeleteModal,
-    handleConfirmDeleteContact,
-    contacts,
-    searchTerm,
-    hasError,
-    filteredContacts,
-    orderBy,
-    handleToggleOrderBy,
-    handleDeleteContact,
-  } = useHome();
-
+export default function ContactsList({
+  isLoading,
+  isDeleteModalVisible,
+  isLoadingDelete,
+  contactBeingDeleted,
+  handleCloseDeleteModal,
+  handleConfirmDeleteContact,
+  contacts,
+  searchTerm,
+  hasError,
+  filteredContacts,
+  orderBy,
+  handleToggleOrderBy,
+  handleDeleteContact,
+}) {
   return (
     <>
       {!hasError && (
@@ -113,3 +111,19 @@ export default function ContactsList() {
     </>
   );
 }
+
+ContactsList.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  isDeleteModalVisible: PropTypes.bool.isRequired,
+  isLoadingDelete: PropTypes.bool.isRequired,
+  contactBeingDeleted: PropTypes.shape().isRequired,
+  handleCloseDeleteModal: PropTypes.func.isRequired,
+  handleConfirmDeleteContact: PropTypes.func.isRequired,
+  contacts: PropTypes.shape().isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  hasError: PropTypes.bool.isRequired,
+  filteredContacts: PropTypes.shape().isRequired,
+  orderBy: PropTypes.string.isRequired,
+  handleToggleOrderBy: PropTypes.func.isRequired,
+  handleDeleteContact: PropTypes.func.isRequired,
+};

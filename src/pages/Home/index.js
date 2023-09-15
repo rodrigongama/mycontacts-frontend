@@ -13,10 +13,19 @@ export default function Home() {
   const {
     isLoading,
     contacts,
+    filteredContacts,
     searchTerm,
     handleChangeSearchTerm,
     hasError,
     handleTryAgain,
+    isDeleteModalVisible,
+    isLoadingDelete,
+    contactBeingDeleted,
+    handleCloseDeleteModal,
+    handleConfirmDeleteContact,
+    orderBy,
+    handleToggleOrderBy,
+    handleDeleteContact,
   } = useHome();
 
   return (
@@ -34,7 +43,11 @@ export default function Home() {
         </InputSearchContainer>
       )}
 
-      <Header />
+      <Header
+        hasError={hasError}
+        qtyOfContacts={contacts.length}
+        qtyOfFilteredContacts={filteredContacts.length}
+      />
 
       {hasError && (
         <ErrorContainer>
@@ -53,7 +66,21 @@ export default function Home() {
         </ErrorContainer>
       )}
 
-      <ContactsList />
+      <ContactsList
+        isLoading={isLoading}
+        isDeleteModalVisible={isDeleteModalVisible}
+        isLoadingDelete={isLoadingDelete}
+        contactBeingDeleted={contactBeingDeleted}
+        handleCloseDeleteModal={handleCloseDeleteModal}
+        handleConfirmDeleteContact={handleConfirmDeleteContact}
+        contacts={contacts}
+        searchTerm={searchTerm}
+        hasError={hasError}
+        filteredContacts={filteredContacts}
+        orderBy={orderBy}
+        handleToggleOrderBy={handleToggleOrderBy}
+        handleDeleteContact={handleDeleteContact}
+      />
     </Container>
   );
 }
