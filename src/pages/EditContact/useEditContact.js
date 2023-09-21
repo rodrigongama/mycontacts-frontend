@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import useSafeAsyncAction from '../../hooks/useSafeAsyncAction';
 import ContactsService from '../../services/ContactsService';
@@ -7,7 +7,7 @@ import toast from '../../utils/toast';
 
 export default function useEditContact() {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const contactFormRef = useRef(null);
   const safeAsyncAction = useSafeAsyncAction();
 
@@ -43,8 +43,9 @@ export default function useEditContact() {
           setIsLoading(false);
         });
       } catch {
-        history.push('/');
         safeAsyncAction(() => {
+          navigate('/', { replace: true });
+
           toast({
             type: 'danger',
             text: 'Contato não encontrado!',
@@ -54,7 +55,7 @@ export default function useEditContact() {
     }
 
     loadContact();
-  }, [id, history, safeAsyncAction]);
+  }, [id, navigate, safeAsyncAction]);
 
   return {
     isLoading,
