@@ -27,6 +27,7 @@
       "react-hooks/exhaustive-deps": "warn",
       "react/jsx-no-bind": "off",
       "class-methods-use-this": "off",
-      "no-empty": ["error", { "allowEmptyCatch": true }]
+      "no-empty": ["error", { "allowEmptyCatch": true }],
+      "react/require-default-props": "off"
     }
 }
